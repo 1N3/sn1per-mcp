@@ -1,0 +1,11 @@
+{
+  "name": "sn1per",
+  "version": "0.9.0",
+  "description": "Drive your self-hosted Sn1per from your AI assistant: scoped, audited, for authorized testing.",
+  "author": {
+    "name": "Sn1perSecurity LLC",
+    "email": "support@sn1persecurity.com"
+  },
+  "homepage": "https://github.com/1N3/sn1per-mcp",
+  "license": "Apache-2.0"
+}

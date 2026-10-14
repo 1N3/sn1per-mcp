@@ -1,0 +1,3 @@
+app.example:22/tcp open ssh
+app.example:80/tcp open http
+app.example:443/tcp open https

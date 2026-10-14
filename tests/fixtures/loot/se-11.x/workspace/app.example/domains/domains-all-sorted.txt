@@ -1,0 +1,7 @@
+api.app.example
+app.example
+dev.app.example
+www.app.example
+192.0.2.10
+www.app.example:8443
+*.app.example

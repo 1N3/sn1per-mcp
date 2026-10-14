@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sn1per-mcp"
+dynamic = ["version"]
+description = "Run scoped, authorized Sn1per pentest, recon and attack surface scans from AI agents; read findings."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Sn1perSecurity LLC", email = "support@sn1persecurity.com" }]
+keywords = [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "sn1per",
+    "pentest",
+    "penetration-testing",
+    "recon",
+    "reconnaissance",
+    "attack-surface-management",
+    "security-testing",
+    "osint",
+    "kali-linux",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Security",
+]
+dependencies = [
+    "mcp>=1.28.1,<2",
+    "idna>=3.7,<4",
+    "pydantic>=2.11,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+    "build>=1.2",
+    "twine>=5.1",
+    "trove-classifiers",
+]
+
+[project.urls]
+Homepage = "https://sn1persecurity.com/?utm_source=pypi&utm_medium=package&utm_campaign=sn1per-mcp"
+Documentation = "https://github.com/1N3/sn1per-mcp/tree/main/docs"
+Source = "https://github.com/1N3/sn1per-mcp"
+Issues = "https://github.com/1N3/sn1per-mcp/issues"
+Changelog = "https://github.com/1N3/sn1per-mcp/blob/main/CHANGELOG.md"
+Security = "https://github.com/1N3/sn1per-mcp/security/policy"
+
+[project.scripts]
+sn1per-mcp = "sniper_mcp.server:main"
+sniper-mcp-server = "sniper_mcp.server:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "sniper_mcp.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S102", "S307"]

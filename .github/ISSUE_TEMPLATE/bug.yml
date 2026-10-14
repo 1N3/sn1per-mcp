@@ -1,0 +1,67 @@
+name: Bug report
+description: Something in the Sn1per MCP Server does not work as documented.
+labels: ["bug", "needs-repro"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Security vulnerabilities go to Private Vulnerability
+        Reporting, not here. Before you paste anything, remove targets, hostnames, IP
+        addresses, loot and credentials. Use `app.example` or `192.0.2.10` instead.
+  - type: input
+    id: version
+    attributes:
+      label: Server version
+      description: Output of `sn1per-mcp --version`.
+      placeholder: sn1per-mcp 0.9.0
+    validations:
+      required: true
+  - type: input
+    id: edition
+    attributes:
+      label: Sn1per edition and engine version
+      description: The `edition` and engine version reported by `sniper_status` (or `sn1per-mcp --check`).
+      placeholder: ce, engine 9.2
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: MCP client and version
+      placeholder: Claude Code 2.x
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system and Python version
+      placeholder: Kali Rolling (amd64), Python 3.13
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Include the error code if a tool returned one.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Configure the scope ...
+        2. Ask the client to run sniper_status ...
+  - type: textarea
+    id: log-tail
+    attributes:
+      label: Redacted log tail
+      description: The relevant lines from the client log or the job log, with targets, loot and secrets removed.
+      render: text
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: I removed targets, hostnames, loot and credentials
+          required: true

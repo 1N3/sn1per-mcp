@@ -1,0 +1,6 @@
+include LICENSE NOTICE TRADEMARKS.md SECURITY.md CHANGELOG.md server.json README.md
+graft docs
+graft tests
+# tests/test_release_files.py loads both scripts.
+graft scripts
+global-exclude __pycache__ *.py[cod]

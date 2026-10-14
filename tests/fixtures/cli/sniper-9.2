@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Sn1perSecurity LLC
+#
+# Stub Sn1per CLI for the test suite (dialect 9.x). It is never a real engine.
+# tests/conftest.py copies it into the pytest temp root and replaces the @...@
+# placeholders. It parses argv strictly left to right like the real CLIs:
+# -w sets the workspace, -d deletes immediately and --export exports immediately
+# (so "-d" before "-w" wipes every workspace, the 12fe4bb bug).
+VER="9.2"
+INSTALL_DIR="@INSTALL_DIR@"
+STUB_TEMP_ROOT="@TEMP_ROOT@"
+STUB_KNOBS="@KNOBS@"
+STUB_LOG="@ARGV_LOG@"
+STUB_PYTHON="@PYTHON@"
+
+# Self-check (contract O.3): do nothing unless INSTALL_DIR is inside the pytest
+# temp root. Bash code is outside the Python audit hook; this is its guard.
+case "$STUB_TEMP_ROOT" in ""|@*) exit 97 ;; esac
+_real_install="$(realpath -m -- "$INSTALL_DIR")" || exit 97
+case "$_real_install/" in "$STUB_TEMP_ROOT"/*) ;; *) exit 97 ;; esac
+
+_json_str() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//$'\n'/\\n}
+  s=${s//$'\r'/\\r}
+  s=${s//$'\t'/\\t}
+  printf '"%s"' "$s"
+}
+
+_log_argv() {
+  local out='{"prog":"sniper","argv":[' first=1 a
+  for a in "$0" "$@"; do
+    if [ "$first" -eq 1 ]; then first=0; else out+=','; fi
+    out+=$(_json_str "$a")
+  done
+  out+=']}'
+  printf '%s\n' "$out" >> "$STUB_LOG"
+}
+
+_log_argv "$@"
+
+# Behaviour knobs come from a JSON file (the server passes a minimal
+# environment, so knobs cannot travel through it).
+eval "$("$STUB_PYTHON" -I -S -c '
+import json, shlex, sys
+try:
+    with open(sys.argv[1]) as fh:
+        k = json.load(fh)
+except FileNotFoundError:
+    k = {}
+q = lambda v: shlex.quote(str(v))
+print("KNOB_EXIT=" + q(int(k.get("exit_status", 0))))
+print("KNOB_STDOUT=" + q(k.get("stdout", "")))
+print("KNOB_SLEEP=" + q(float(k.get("sleep", 0))))
+print("KNOB_IGNORE_TERM=" + q(1 if k.get("ignore_term") else 0))
+print("KNOB_IGNORE_HUP=" + q(1 if k.get("ignore_hup") else 0))
+print("KNOB_DELETE=" + q(k.get("delete_mode", "normal")))
+print("KNOB_FILES=(" + " ".join(q(f) for f in k.get("files", [])) + ")")
+' "$STUB_KNOBS")" || exit 96
+
+LOOT_DIR="$INSTALL_DIR/loot"
+TARGET=""
+MODE=""
+WORKSPACE=""
+PORT=""
+
+_delete() {
+  printf 'Are you sure you want to remove the following directory? %s\n' "$LOOT_DIR/workspace/$WORKSPACE/"
+  read -r _answer
+  [ -n "$KNOB_STDOUT" ] && printf '%s\n' "$KNOB_STDOUT"
+  case "$KNOB_DELETE" in
+    noop) ;;
+    all) rm -Rf -- "$LOOT_DIR/workspace/" ;;
+    reimport)
+      # Like CE: the delete re-imports the default workspace afterwards.
+      rm -Rf -- "$LOOT_DIR/workspace/$WORKSPACE/"
+      mkdir -p -- "$LOOT_DIR/workspace/default" ;;
+    *) rm -Rf -- "$LOOT_DIR/workspace/$WORKSPACE/" ;;
+  esac
+  printf 'Workspace %s removed.\n' "$WORKSPACE"
+}
+
+_export() {
+  mkdir -p -- "$LOOT_DIR/workspace/$WORKSPACE-export"
+  cp -a -- "$LOOT_DIR/workspace/$WORKSPACE/." "$LOOT_DIR/workspace/$WORKSPACE-export/"
+  printf 'Exported %s.\n' "$WORKSPACE"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -t|--target) TARGET="$2"; shift 2 ;;
+    -m|--mode) MODE="$2"; shift 2 ;;
+    -w|--workspace) WORKSPACE="$(printf '%s' "$2" | tr / -)"; shift 2 ;;
+    -p|--port) PORT="$2"; shift 2 ;;
+    -d|--delete) _delete; exit 0 ;;
+    --export) _export; exit 0 ;;
+    *) shift ;;
+  esac
+done
+
+if [ -z "$TARGET" ] && [ -z "$WORKSPACE" ]; then
+  echo "You need to specify a target or workspace to use. Type sniper --help for command usage."
+  exit 1
+fi
+[ -n "$WORKSPACE" ] || WORKSPACE="$(printf '%s' "$TARGET" | tr / -)"
+
+if [ "$KNOB_IGNORE_TERM" = 1 ]; then trap '' TERM; fi
+# A process that also ignores the terminal hangup survives the end of the terminal
+# holder (L.6); its children inherit the ignored signals.
+if [ "$KNOB_IGNORE_HUP" = 1 ]; then trap '' HUP; fi
+mkdir -p -- "$LOOT_DIR/workspace/$WORKSPACE"
+[ -n "$KNOB_STDOUT" ] && printf '%s\n' "$KNOB_STDOUT"
+for f in "${KNOB_FILES[@]}"; do
+  case "$f" in /*|*..*) continue ;; esac
+  mkdir -p -- "$(dirname -- "$LOOT_DIR/workspace/$WORKSPACE/$f")"
+  : > "$LOOT_DIR/workspace/$WORKSPACE/$f"
+done
+if [ "$KNOB_SLEEP" != "0.0" ]; then
+  # The sleep is a child, like the engine's tools. A well-behaved engine exits on
+  # SIGTERM and takes its children with it; with ignore_term both ignore SIGTERM.
+  sleep "$KNOB_SLEEP" &
+  _sleep_pid=$!
+  if [ "$KNOB_IGNORE_TERM" != 1 ]; then
+    trap 'kill "$_sleep_pid" 2>/dev/null; exit 143' TERM
+  fi
+  wait "$_sleep_pid"
+fi
+exit "$KNOB_EXIT"

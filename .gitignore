@@ -1,0 +1,25 @@
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+.eggs/
+*.whl
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Logs
+*.log

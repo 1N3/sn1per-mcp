@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest an improvement to the Sn1per MCP Server.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Requests that would weaken scope enforcement, the audit log or redaction, or that
+        help scan targets you are not authorized to test, will be declined.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what stops you today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: The behaviour you would like, for example a new read tool, a parameter, or a setting.
+    validations:
+      required: true
+  - type: input
+    id: edition
+    attributes:
+      label: Sn1per edition this applies to
+      placeholder: all editions
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

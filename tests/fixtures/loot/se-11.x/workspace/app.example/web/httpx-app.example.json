@@ -1,0 +1,2 @@
+{"input": "app.example", "host": "app.example", "port": "443", "scheme": "https", "tech": ["Nginx:1.24.0", "PHP:8.2.7", "jQuery"]}
+not json

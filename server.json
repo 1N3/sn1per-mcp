@@ -1,0 +1,147 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.sn1persecurity/sn1per-mcp",
+  "title": "Sn1per MCP Server: pentest, recon and attack surface scanning",
+  "description": "Run scoped, authorized Sn1per pentest, recon and attack surface scans from AI agents; read findings.",
+  "version": "0.9.0",
+  "websiteUrl": "https://github.com/1N3/sn1per-mcp#readme",
+  "repository": {
+    "url": "https://github.com/1N3/sn1per-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/1N3/sn1per-mcp/v0.9.0/assets/sn1per-mcp-256.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "sn1per-mcp",
+      "version": "0.9.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "SNIPER_MCP_SCOPE",
+          "description": "Comma-separated domains, IPs and CIDR ranges you are authorized to test (prefix ! to exclude). Scans outside it are refused.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "placeholder": "app.example,192.0.2.0/24"
+        },
+        {
+          "name": "SNIPER_MCP_SCOPE_FILE",
+          "description": "Optional absolute path to a scope file with one or more entries per line and # comments.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "filepath"
+        },
+        {
+          "name": "SNIPER_MCP_AUTHORIZATION_REF",
+          "description": "Optional authorization reference, such as a statement-of-work or ticket id, recorded in the audit log.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string"
+        },
+        {
+          "name": "SNIPER_MCP_ALLOW_INTRUSIVE",
+          "description": "Set to true to offer scan modes that run brute force, exploitation or injection testing. Off by default.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "SNIPER_MCP_ENABLE_DESTRUCTIVE",
+          "description": "Set to true to add the workspace delete and export tools; they ask the human to confirm. Off by default.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "SNIPER_MCP_REDACT",
+          "description": "Redaction of secrets in results. On by default; turn off only with a local model when raw values are required.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "SNIPER_EDITION",
+          "description": "Optional override of the auto-detected Sn1per edition.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "choices": [
+            "auto",
+            "ce",
+            "se",
+            "pro",
+            "enterprise"
+          ],
+          "default": "auto"
+        },
+        {
+          "name": "SNIPER_BIN",
+          "description": "Optional absolute path to the sniper CLI. Detected automatically on standard installs.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "filepath",
+          "placeholder": "/usr/share/sniper/sniper"
+        },
+        {
+          "name": "SNIPER_INSTALL_DIR",
+          "description": "Optional Sn1per install directory. Read from the CLI or /usr/share/sniper by default.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "filepath",
+          "placeholder": "/usr/share/sniper"
+        },
+        {
+          "name": "SNIPER_LOOT_BASE",
+          "description": "Optional directory that contains the loot workspace tree. Defaults to the install directory's loot folder.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "filepath",
+          "placeholder": "/usr/share/sniper/loot"
+        },
+        {
+          "name": "SNIPER_SCAN_ENABLED",
+          "description": "Set to false for a read-only deployment that never launches scans.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "boolean",
+          "default": "true"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "com.sn1persecurity": {
+        "editions": [
+          "ce",
+          "se",
+          "pro",
+          "enterprise"
+        ],
+        "platform": "linux",
+        "transport": "stdio only",
+        "hostRequirements": "Runs beside a local Sn1per install (CE 9.x or the 11.x engine). Scan and delete tools need root through a passwordless sudo rule for the Sn1per CLI; read tools run unprivileged.",
+        "intendedUse": "Authorized security testing only: systems you own or are explicitly permitted in writing to test.",
+        "controls": "Mandatory target scope, local JSONL audit log, secrets redaction; intrusive modes and destructive tools are off by default.",
+        "documentation": "https://github.com/1N3/sn1per-mcp#readme",
+        "securityPolicy": "https://github.com/1N3/sn1per-mcp/security/policy"
+      }
+    }
+  }
+}

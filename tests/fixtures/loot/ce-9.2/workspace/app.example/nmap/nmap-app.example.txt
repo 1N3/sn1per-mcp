@@ -1,0 +1,6 @@
+Nmap scan report for app.example (192.0.2.10)
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 9.6p1 (protocol 2.0)
+80/tcp  open  http    nginx 1.24.0
+443/tcp open  ssl/http nginx 1.24.0
+161/udp open|filtered snmp

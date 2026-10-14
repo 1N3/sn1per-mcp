@@ -1,0 +1,18 @@
+{
+  "name": "sn1per-mcp",
+  "owner": {
+    "name": "Sn1perSecurity LLC",
+    "email": "support@sn1persecurity.com"
+  },
+  "metadata": {
+    "description": "Drive your self-hosted Sn1per from your AI assistant: scoped, audited, for authorized testing."
+  },
+  "plugins": [
+    {
+      "name": "sn1per",
+      "source": "./plugins/sn1per",
+      "description": "Drive your self-hosted Sn1per from your AI assistant: scoped, audited, for authorized testing.",
+      "version": "0.9.0"
+    }
+  ]
+}

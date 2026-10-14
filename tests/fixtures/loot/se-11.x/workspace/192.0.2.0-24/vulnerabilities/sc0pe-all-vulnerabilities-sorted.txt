@@ -1,0 +1,2 @@
+P2 - HIGH, MySQL Exposed, Database, 192.0.2.12:3306, Reachable from the scanner
+P5 - INFO, SSH Banner, 192.0.2.1:22, OpenSSH 9.6p1

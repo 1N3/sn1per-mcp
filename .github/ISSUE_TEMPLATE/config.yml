@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/1N3/sn1per-mcp/security/advisories/new
+    about: Please report vulnerabilities privately through GitHub Private Vulnerability Reporting, not in a public issue.
+  - name: Paying Sn1per Professional and Enterprise customers
+    url: mailto:support@sn1persecurity.com
+    about: Customers with a support agreement can email support@sn1persecurity.com.
+  - name: Questions and help
+    url: https://github.com/1N3/sn1per-mcp/discussions
+    about: Ask questions and share setups in GitHub Discussions.

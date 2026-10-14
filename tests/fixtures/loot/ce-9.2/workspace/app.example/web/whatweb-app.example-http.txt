@@ -1,0 +1,2 @@
+http://app.example [301 Moved Permanently] Country[RESERVED][ZZ], HTTPServer[nginx/1.24.0], IP[192.0.2.10], RedirectLocation[https://app.example/], Title[301 Moved Permanently], nginx[1.24.0]
+https://app.example/ [200 OK] Country[RESERVED][ZZ], HTTPServer[nginx/1.24.0], IP[192.0.2.10], JQuery[3.7.1], PHP[8.2.7], Title[App], nginx[1.24.0]

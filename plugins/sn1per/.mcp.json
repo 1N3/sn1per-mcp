@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "sn1per": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "sn1per-mcp==0.9.0",
+        "sn1per-mcp"
+      ],
+      "env": {
+        "SNIPER_MCP_SCOPE": "${SNIPER_MCP_SCOPE:-}",
+        "SNIPER_MCP_SCOPE_FILE": "${SNIPER_MCP_SCOPE_FILE:-}",
+        "SNIPER_MCP_AUTHORIZATION_REF": "${SNIPER_MCP_AUTHORIZATION_REF:-}"
+      }
+    }
+  }
+}

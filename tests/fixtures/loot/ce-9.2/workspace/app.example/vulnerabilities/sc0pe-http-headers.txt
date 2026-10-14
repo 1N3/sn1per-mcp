@@ -1,0 +1,1 @@
+P3 - MEDIUM, Missing Security Headers, Content-Security-Policy, app.example:443, Header not set

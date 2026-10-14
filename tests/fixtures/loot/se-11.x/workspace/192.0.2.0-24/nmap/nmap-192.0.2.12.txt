@@ -1,0 +1,3 @@
+Nmap scan report for 192.0.2.12
+PORT     STATE SERVICE VERSION
+3306/tcp open  mysql   MySQL 8.0.36

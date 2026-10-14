@@ -1,0 +1,13 @@
+WhatWeb report for https://app.example:443
+Status    : 200 OK
+Title     : App
+IP        : 192.0.2.10
+Country   : RESERVED, ZZ
+
+Summary   : HTTPServer[nginx/1.24.0], JQuery[3.7.1], PHP[8.2.7], nginx[1.24.0]
+
+Detected Plugins:
+[ HTTPServer ]
+	HTTP server header string.
+
+	String       : nginx/1.24.0 (from server string)

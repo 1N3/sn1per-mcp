@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Sn1perSecurity LLC
+#
+# Stub sudo for the test suite. tests/conftest.py copies it into the pytest temp
+# root and replaces the @...@ placeholders. Supported forms:
+#   sudo -n -l <cmd>            exit 0, or the "sudo_list_exit" knob
+#   sudo -n -- <cmd> [args...]  run <cmd> (exec by default; with the "sudo_fork" knob
+#                               as a child, relaying SIGTERM to it like real sudo)
+# The "sudo_password_required" knob prints the real sudo message and exits 1.
+# The "use_pty" knob behaves like sudo 1.9.14+ (use_pty on by default): with a
+# controlling terminal the command runs in a process group of its own, SIGTERM is
+# relayed to that whole group and a hangup of the terminal is ignored; without one,
+# SIGTERM reaches only the direct child.
+STUB_TEMP_ROOT="@TEMP_ROOT@"
+STUB_KNOBS="@KNOBS@"
+STUB_LOG="@ARGV_LOG@"
+STUB_PYTHON="@PYTHON@"
+
+case "$STUB_TEMP_ROOT" in ""|@*) exit 97 ;; esac
+
+_json_str() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//$'\n'/\\n}
+  s=${s//$'\r'/\\r}
+  s=${s//$'\t'/\\t}
+  printf '"%s"' "$s"
+}
+_out='{"prog":"sudo","argv":['
+_first=1
+for _a in "$0" "$@"; do
+  if [ "$_first" -eq 1 ]; then _first=0; else _out+=','; fi
+  _out+=$(_json_str "$_a")
+done
+printf '%s]}\n' "$_out" >> "$STUB_LOG"
+
+[ "$1" = "-n" ] || { echo "stub sudo: expected -n first" >&2; exit 98; }
+shift
+case "$1" in
+  -l) FORM=list; CMD="$2"; shift 2 ;;
+  --) FORM=run; CMD="$2"; shift 2 ;;
+  *) echo "stub sudo: unsupported invocation" >&2; exit 98 ;;
+esac
+
+# Self-check (contract O.3): never run anything outside the pytest temp root.
+[ -n "$CMD" ] || exit 97
+_real_cmd="$(realpath -m -- "$CMD")" || exit 97
+case "$_real_cmd" in "$STUB_TEMP_ROOT"/*) ;; *) exit 97 ;; esac
+
+eval "$("$STUB_PYTHON" -I -S -c '
+import json, shlex, sys
+try:
+    with open(sys.argv[1]) as fh:
+        k = json.load(fh)
+except FileNotFoundError:
+    k = {}
+q = lambda v: shlex.quote(str(v))
+print("KNOB_LIST_EXIT=" + q(int(k.get("sudo_list_exit", 0))))
+print("KNOB_PASSWORD=" + q(1 if k.get("sudo_password_required") else 0))
+print("KNOB_FORK=" + q(1 if k.get("sudo_fork") else 0))
+print("KNOB_USE_PTY=" + q(1 if k.get("use_pty") else 0))
+' "$STUB_KNOBS")" || exit 96
+
+if [ "$KNOB_PASSWORD" = 1 ]; then
+  echo "sudo: a password is required" >&2
+  exit 1
+fi
+if [ "$FORM" = list ]; then
+  [ "$KNOB_LIST_EXIT" = 0 ] && printf '%s\n' "$CMD"
+  exit "$KNOB_LIST_EXIT"
+fi
+if [ "$KNOB_USE_PTY" = 1 ] && { true < /dev/tty; } 2>/dev/null; then
+  set -m
+  "$CMD" "$@" &
+  _child=$!
+  set +m
+  trap 'kill -TERM -- "-$_child" 2>/dev/null' TERM
+  # Real sudo outlives the hangup of its own terminal (the command runs on a terminal
+  # of its own), so the end of the terminal holder alone does not stop the scan.
+  trap '' HUP
+  while :; do
+    wait "$_child"
+    _status=$?
+    kill -0 "$_child" 2>/dev/null || exit "$_status"
+  done
+fi
+if [ "$KNOB_FORK" = 1 ] || [ "$KNOB_USE_PTY" = 1 ]; then
+  "$CMD" "$@" &
+  _child=$!
+  trap 'kill -TERM "$_child" 2>/dev/null' TERM
+  while :; do
+    wait "$_child"
+    _status=$?
+    kill -0 "$_child" 2>/dev/null || exit "$_status"
+  done
+fi
+exec "$CMD" "$@"

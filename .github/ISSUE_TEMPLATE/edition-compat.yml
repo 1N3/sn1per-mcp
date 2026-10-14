@@ -1,0 +1,57 @@
+name: Edition compatibility
+description: The server behaves differently on a Sn1per edition or engine version.
+labels: ["needs-repro"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when detection, scan modes or loot reading do not match your Sn1per
+        edition. Remove targets, hostnames, loot and credentials before you paste anything.
+  - type: input
+    id: version
+    attributes:
+      label: Server version
+      description: Output of `sn1per-mcp --version`.
+      placeholder: sn1per-mcp 0.9.0
+    validations:
+      required: true
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Sn1per edition
+      options:
+        - Community Edition (CE)
+        - SE (scan engine)
+        - Professional
+        - Enterprise
+        - Other or unsure
+    validations:
+      required: true
+  - type: input
+    id: engine-version
+    attributes:
+      label: Engine version and install method
+      description: The engine version from `sniper_status`, and how Sn1per was installed (install script, Docker image, BlackArch package, customer package).
+      placeholder: 11.x, customer package
+    validations:
+      required: true
+  - type: textarea
+    id: check-output
+    attributes:
+      label: Output of `sn1per-mcp --check`
+      description: Run it with the same `--env-file` your client uses. Remove targets and paths that identify your organisation.
+      render: text
+  - type: textarea
+    id: difference
+    attributes:
+      label: What differs
+      description: Which tool or mode, what you expected for this edition, and what happened.
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: I removed targets, hostnames, loot and credentials
+          required: true

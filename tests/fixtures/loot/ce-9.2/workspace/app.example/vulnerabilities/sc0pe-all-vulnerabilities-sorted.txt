@@ -1,0 +1,6 @@
+P1 - CRITICAL, Remote Code Execution, Unauthenticated, https://app.example/upload, Upload handler accepts arbitrary files
+P2 - HIGH, Clear-Text Protocol - HTTP, http://app.example/, Login form posts credentials over HTTP
+P3 - MEDIUM, Missing Security Headers, Content-Security-Policy, app.example:443, Header not set
+P4 - LOW, Server Version Disclosure, nginx, www.app.example:80, Banner reveals version
+P5 - INFO, Open Port, app.example:22, SSH service detected
+not a finding line

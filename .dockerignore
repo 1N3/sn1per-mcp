@@ -1,0 +1,12 @@
+# Allowlist: the introspection image needs only the package sources and the
+# files that the build and the licence notices read.
+*
+!pyproject.toml
+!README.md
+!LICENSE
+!NOTICE
+!MANIFEST.in
+!src/
+**/__pycache__
+**/*.py[cod]
+**/*.egg-info

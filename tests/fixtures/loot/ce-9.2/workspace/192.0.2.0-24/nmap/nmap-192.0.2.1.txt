@@ -1,0 +1,3 @@
+Nmap scan report for 192.0.2.1
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 9.6p1
