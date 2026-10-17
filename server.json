@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "com.sn1persecurity/sn1per-mcp",
+  "name": "io.github.1N3/sn1per-mcp",
   "title": "Sn1per MCP Server: pentest, recon and attack surface scanning",
   "description": "Run scoped, authorized Sn1per pentest, recon and attack surface scans from AI agents; read findings.",
   "version": "0.9.0",

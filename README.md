@@ -5,7 +5,7 @@ Drive your self-hosted Sn1per from your AI assistant: scoped, audited, for autho
 [![PyPI version of sn1per-mcp](https://img.shields.io/pypi/v/sn1per-mcp)](https://pypi.org/project/sn1per-mcp/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/1N3/sn1per-mcp/blob/main/LICENSE)
 
-<!-- mcp-name: com.sn1persecurity/sn1per-mcp -->
+<!-- mcp-name: io.github.1N3/sn1per-mcp -->
 
 > For authorized security testing only. Use the Sn1per MCP Server only against systems you own or are explicitly permitted, in writing, to test, and within the scope of that permission.
 

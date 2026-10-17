@@ -82,7 +82,7 @@ from pathlib import Path
 # --- identity and canonical values ------------------------------------------------------
 
 REPO_URL = "https://github.com/1N3/sn1per-mcp"
-REGISTRY_NAME = "com.sn1persecurity/sn1per-mcp"
+REGISTRY_NAME = "io.github.1N3/sn1per-mcp"
 REGISTRY_TITLE = "Sn1per MCP Server: pentest, recon and attack surface scanning"
 DESCRIPTION = ("Run scoped, authorized Sn1per pentest, recon and attack surface scans "
                "from AI agents; read findings.")

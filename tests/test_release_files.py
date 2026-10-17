@@ -218,7 +218,7 @@ CONSISTENCY_MUTATIONS = {
         r, "server.json", lambda d: d["icons"][0].update(
             src=d["icons"][0]["src"].replace(ICON_TAG, "/main/")))),
     "server.json name": ("server.json", lambda r: _edit_json(
-        r, "server.json", lambda d: d.update(name="io.github.1N3/sn1per-mcp"))),
+        r, "server.json", lambda d: d.update(name="com.sn1persecurity/sn1per-mcp"))),
     "server.json scope placeholder": ("server.json", lambda r: _edit_json(
         r, "server.json", lambda d: d["packages"][0]["environmentVariables"][0].update(
             placeholder="app.example"))),
@@ -227,8 +227,8 @@ CONSISTENCY_MUTATIONS = {
     "Dockerfile version label": ("Dockerfile", lambda r: _edit_text(
         r, "Dockerfile", f'image.version="{VERSION}"', f'image.version="{OTHER_VERSION}"')),
     "Dockerfile registry name label": ("Dockerfile", lambda r: _edit_text(
-        r, "Dockerfile", 'server.name="com.sn1persecurity/sn1per-mcp"',
-        'server.name="io.github.1N3/sn1per-mcp"')),
+        r, "Dockerfile", 'server.name="io.github.1N3/sn1per-mcp"',
+        'server.name="com.sn1persecurity/sn1per-mcp"')),
     "marketplace plugin version": (".claude-plugin/marketplace.json", lambda r: _edit_json(
         r, ".claude-plugin/marketplace.json",
         lambda d: d["plugins"][0].update(version=OTHER_VERSION))),
@@ -1238,7 +1238,7 @@ def test_mcp_call_lists_tools_over_stdio(iso):
 # The P.8 server.json block of the contract (host paths from tests/realpaths.py, O.2).
 EXPECTED_SERVER_JSON = {
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-    "name": "com.sn1persecurity/sn1per-mcp",
+    "name": "io.github.1N3/sn1per-mcp",
     "title": "Sn1per MCP Server: pentest, recon and attack surface scanning",
     "description": (
         "Run scoped, authorized Sn1per pentest, recon and attack surface scans from AI agents; "

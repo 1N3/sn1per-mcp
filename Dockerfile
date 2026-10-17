@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.title="Sn1per MCP Server" \
       org.opencontainers.image.version="0.9.0" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.source="https://github.com/1N3/sn1per-mcp" \
-      io.modelcontextprotocol.server.name="com.sn1persecurity/sn1per-mcp"
+      io.modelcontextprotocol.server.name="io.github.1N3/sn1per-mcp"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1

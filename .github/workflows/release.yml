@@ -109,8 +109,10 @@ jobs:
     timeout-minutes: 30
     environment:
       name: mcp-registry-publish
-    # For the fallback namespace (io.github.1N3/sn1per-mcp) add
-    # `permissions: id-token: write` here and use `mcp-publisher login github-oidc`.
+    # Namespace io.github.1N3/sn1per-mcp: authenticated with GitHub OIDC (no DNS key).
+    permissions:
+      contents: read
+      id-token: write
     env:
       MCP_PUBLISHER_VERSION: "1.8.1"
       # sha256 of mcp-publisher_linux_amd64.tar.gz from the registry v1.8.1 release.
@@ -160,8 +162,6 @@ jobs:
               time.sleep(30)
           PY
       - name: Publish to the MCP Registry
-        env:
-          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
         run: |
-          "$RUNNER_TEMP/mcp-publisher" login dns --domain sn1persecurity.com --private-key "$MCP_PRIVATE_KEY"
+          "$RUNNER_TEMP/mcp-publisher" login github-oidc
           "$RUNNER_TEMP/mcp-publisher" publish
